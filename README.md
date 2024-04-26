@@ -32,6 +32,12 @@ I couldn't find a suitable image for the Least Time algorithm. You can find one 
 
 <h2>What is going next?</h2>
 
+**What should we know**
+
+* The load balancer will use httputil's package proxy to send client's request on server
+* It won't use config files or something else to add or change servers, so you may add this feature
+* You should give star on this repository as well
+
 **Now we are ready to make the load balancer**
 
 The load balancer will use "Least connections" algorithm and as i said upper our program will direct client's request to server that have the fewest connections.
