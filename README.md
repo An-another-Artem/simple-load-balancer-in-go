@@ -1,12 +1,32 @@
-<h1>Simple load balancer in go</h1>
-First of all we should understand what is load balancer in total. <b>Load balancer<b> is a program that balances client requests so that the servers do not burn out.
-Second of all to understand the load balancers we need to know their algoritms. In general, there are 3 large groups of them, they are:
-<b><ul>Robin Round (it has several types such as Weighted Robin Round and Sticky Robin Round)</ul></b>
-<b><ul>Least connections (we are going to use it in load balancer)</ul></b>
-<b><ul>Least time</ul></b>
-In <b>Robin Round</b> algoritm load balancer allocate requests to all available servers.
+<h1>Simple Load Balancer in Go</h1>
+
+**What is a Load Balancer?**
+
+A load balancer is a program that distributes client requests across multiple servers to prevent overloading any single server. This helps ensure high availability and performance for your application.
+
+**Load Balancing Algorithms**
+
+There are several load balancing algorithms, each with its own advantages and disadvantages. Here are three common ones:
+
+* **Round Robin (including Weighted Round Robin and Sticky Round Robin)**: This algorithm distributes requests evenly among all available servers. Weighted Round Robin assigns more weight to servers with higher capacity, while Sticky Round Robin directs requests from the same client to the same server for session consistency.
+* **Least Connections**: This algorithm tracks the number of active connections on each server and assigns new requests to the server with the fewest connections, aiming for even load distribution. (**This is the algorithm we will be implementing in our Go program.**)
+* **Least Time**: This algorithm measures the response time of each server and directs requests to the server with the fastest response time. 
+
+**Round Robin Algorithm**
+
 <img src="https://www.jscape.com/hubfs/images/round_robin_algorithm-1.png">
-<b>Least connections</b> algoritm counts and stores client's connection to each server.
+In Round Robin, requests are cycled through all available servers, regardless of their current load.
+
+**Least Connections Algorithm**
+
 <img src="https://www.researchgate.net/publication/347808307/figure/fig2/AS:1000876902723590@1615639057440/Least-connection-algorithm.png">
-<b>Least time</b> algoritm sends next request to server which has least ping to the client.
-<i>well, i couldn't found the good image, so imagine in yourself :)</i>
+The Least Connections algorithm keeps track of the number of active connections on each server and directs new requests to the server with the fewest connections, aiming for a more balanced load distribution.
+
+**Least Time Algorithm**
+
+The Least Time algorithm measures the response time of each server and directs requests to the server with the fastest response time. It requires a method to periodically check server response times, which can add complexity.
+
+**Note:**
+
+I couldn't find a suitable image for the Least Time algorithm. You can find one yourself and update the link accordingly.
+
