@@ -110,4 +110,4 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 ```
-<h2>If you like this repository push that like button please!</h2>
+<h2>If you like this repository push that star button please!</h2>
