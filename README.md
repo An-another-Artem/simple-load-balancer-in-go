@@ -42,3 +42,23 @@ I couldn't find a suitable image for the Least Time algorithm. You can find one 
 
 The load balancer will use "Least connections" algorithm and as i said upper our program will direct client's request to server that have the fewest connections.
 
+```Go
+  package main
+  import (
+    ...
+  )
+  var (
+	  BestServer       *Server
+	  LeastConnections uint = 0
+	  FirstURL, _           = url.Parse("http://127.0.0.1:8081") //Parses Raw URL (string) to url.URL
+	  SecondURL, _          = url.Parse("http://127.0.0.1:8082") //Doing the same thing
+  )
+  type Server struct {
+	  URL         url.URL //URL type (we will need it later)
+	  Connections uint
+	  Alive       bool
+	  Mutex       sync.Mutex //Mutex type
+  }
+  type Servers []*Server
+  ...
+```
