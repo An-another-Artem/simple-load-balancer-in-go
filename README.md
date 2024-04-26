@@ -14,12 +14,12 @@ There are several load balancing algorithms, each with its own advantages and di
 
 **Round Robin Algorithm**
 
-<img src="https://www.codereliant.io/content/images/2023/06/d1-1-1.png">
+<img src="https://www.jscape.com/hubfs/images/round_robin_algorithm-1.png"">
 In Round Robin, requests are cycled through all available servers, regardless of their current load.
 
 **Least Connections Algorithm**
 
-<img src="https://www.researchgate.net/publication/347808307/figure/fig2/AS:1000876902723590@1615639057440/Least-connection-algorithm.png">
+<img src="https://www.codereliant.io/content/images/2023/06/d1-1-1.png">
 The Least Connections algorithm keeps track of the number of active connections on each server and directs new requests to the server with the fewest connections, aiming for a more balanced load distribution.
 
 **Least Time Algorithm**
