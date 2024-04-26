@@ -1,5 +1,7 @@
 <h1>Simple Load Balancer in Go</h1>
 
+**Русская версия:** [здесь](https://github.com/An-another-Artem/simple-load-balancer-in-go)
+
 **What is a Load Balancer?**
 
 A load balancer is a program that distributes client requests across multiple servers to prevent overloading any single server. This helps ensure high availability and performance for your application.
