@@ -1,6 +1,6 @@
 <h1>Simple Load Balancer in Go</h1>
 
-**Русская версия:** [здесь](https://github.com/An-another-Artem/simple-load-balancer-in-go)
+**Русская версия:** [здесь](https://github.com/An-another-Artem/simple-load-balancer-in-go-ru)
 
 **What is a Load Balancer?**
 
