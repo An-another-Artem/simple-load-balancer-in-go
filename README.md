@@ -14,7 +14,7 @@ There are several load balancing algorithms, each with its own advantages and di
 
 **Round Robin Algorithm**
 
-<img src="https://www.jscape.com/hubfs/images/round_robin_algorithm-1.png"">
+<img src="https://www.jscape.com/hubfs/images/round_robin_algorithm-1.png">
 In Round Robin, requests are cycled through all available servers, regardless of their current load.
 
 **Least Connections Algorithm**
