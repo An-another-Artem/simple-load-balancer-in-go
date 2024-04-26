@@ -30,3 +30,9 @@ The Least Time algorithm measures the response time of each server and directs r
 
 I couldn't find a suitable image for the Least Time algorithm. You can find one yourself and update the link accordingly.
 
+<h2>What is going next?</h2>
+
+**Now we are ready to make the load balancer**
+
+The load balancer will use "Least connections" algorithm and as i said upper our program will direct client's request to server that have the fewest connections.
+
