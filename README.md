@@ -9,7 +9,7 @@ A load balancer is a program that distributes client requests across multiple se
 There are several load balancing algorithms, each with its own advantages and disadvantages. Here are three common ones:
 
 * **Round Robin (including Weighted Round Robin and Sticky Round Robin)**: This algorithm distributes requests evenly among all available servers. Weighted Round Robin assigns more weight to servers with higher capacity, while Sticky Round Robin directs requests from the same client to the same server for session consistency.
-* **Least Connections**: This algorithm tracks the number of active connections on each server and assigns new requests to the server with the fewest connections, aiming for even load distribution. (**This is the algorithm we will be implementing in our Go program.**)
+* **Least Connections (Currently Implemented)**: This algorithm tracks the number of active connections on each server and assigns new requests to the server with the fewest connections, aiming for even load distribution.
 * **Least Time**: This algorithm measures the response time of each server and directs requests to the server with the fastest response time. 
 
 **Round Robin Algorithm**
@@ -17,10 +17,10 @@ There are several load balancing algorithms, each with its own advantages and di
 <img src="https://www.jscape.com/hubfs/images/round_robin_algorithm-1.png">
 In Round Robin, requests are cycled through all available servers, regardless of their current load.
 
-**Least Connections Algorithm**
+**Least Connections Algorithm (Implemented)**
 
 <img src="https://www.codereliant.io/content/images/2023/06/d1-1-1.png">
-The Least Connections algorithm keeps track of the number of active connections on each server and directs new requests to the server with the fewest connections, aiming for a more balanced load distribution.
+This algorithm tracks the number of **active connections** on each server and assigns new requests to the server with the **fewest connections**, aiming for **even load distribution**.
 
 **Least Time Algorithm**
 
@@ -32,33 +32,82 @@ I couldn't find a suitable image for the Least Time algorithm. You can find one 
 
 <h2>What is going next?</h2>
 
-**What should we know**
+**What should we know:**
 
-* The load balancer will use httputil's package proxy to send client's request on server
-* It won't use config files or something else to add or change servers, so you may add this feature
-* You should give star on this repository as well
+* The load balancer uses `httputil`'s package proxy to send client's requests to servers.
+* It currently doesn't use config files or other mechanisms to add or change servers. You can add this feature as an improvement.
 
-**Now we are ready to make the load balancer**
+**Now we are ready to make the load balancer!**
 
-The load balancer will use "Least connections" algorithm and as i said upper our program will direct client's request to server that have the fewest connections.
+The load balancer implements the "Least connections" algorithm. As mentioned earlier, it directs client requests to the server that has the fewest connections.
 
 ```Go
-  package main
-  import (
-    ...
-  )
-  var (
-	  BestServer       *Server
-	  LeastConnections uint = 0
-	  FirstURL, _           = url.Parse("http://127.0.0.1:8081") //Parses Raw URL (string) to url.URL
-	  SecondURL, _          = url.Parse("http://127.0.0.1:8082") //Doing the same thing
-  )
-  type Server struct {
-	  URL         url.URL //URL type (we will need it later)
-	  Connections uint
-	  Alive       bool
-	  Mutex       sync.Mutex //Mutex type
-  }
-  type Servers []*Server
-  ...
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
+	"sync"
+)
+
+var (
+	BestServer       *Server
+	LeastConnections uint = 0
+	FirstURL, _           = url.Parse("http://127.0.0.1:8081")
+	SecondURL, _          = url.Parse("http://127.0.0.1:8082")
+)
+
+type Server struct {
+	URL         url.URL
+	Connections uint
+	Alive       bool
+	Mutex       sync.Mutex
+}
+type Servers []*Server
+
+func (servers Servers) ChooseServer() (*Server, error) {
+	for _, server := range servers {
+		server.Mutex.Lock()
+		if resp, err := http.Get(server.URL.String()); err != nil || resp.StatusCode >= 500 {
+			server.Alive = false
+			return BestServer, err
+		} else {
+			server.Alive = true
+		}
+		if (server.Connections < LeastConnections || LeastConnections == 0) && server.Alive {
+			LeastConnections = server.Connections
+			BestServer = server
+		}
+		if BestServer != nil {
+			server.Connections++
+		}
+		server.Mutex.Unlock()
+	}
+	return BestServer, nil
+}
+func HandleRequest(w http.ResponseWriter, r *http.Request, servers Servers) {
+	server, _ := servers.ChooseServer()
+	if server == nil {
+		fmt.Println("Currently there is no available servers there.")
+		return
+	}
+	defer func() {
+		server.Mutex.Lock()
+		server.Connections--
+		server.Mutex.Unlock()
+	}()
+	proxy := httputil.NewSingleHostReverseProxy(&server.URL)
+	proxy.ServeHTTP(w, r)
+}
+func main() {
+	servers := Servers{{URL: *FirstURL}, {URL: *SecondURL}}
+	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+		HandleRequest(writer, request, servers)
+	})
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
 ```
+<h2>If you like this repository push that like button please!</h2>
