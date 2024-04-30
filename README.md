@@ -30,7 +30,7 @@ The Least Time algorithm measures the response time of each server and directs r
 
 **Note:**
 
-I couldn't find a suitable image for the Least Time algorithm. You can find one yourself and update the link accordingly.
+I couldn't find a suitable image for the Least Time algorithm. You can find one yourself.
 
 <h2>What is going next?</h2>
 
